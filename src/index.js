@@ -12,7 +12,7 @@ const refs = {
 let isShown = 0;
 const newsApiService = new NewsApiService();
 
-refs.searchForm.addEventListener('submit', onSearch);
+// refs.searchForm.addEventListener('submit', onSearch);
 refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
 const options = {
