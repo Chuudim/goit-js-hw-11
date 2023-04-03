@@ -8,6 +8,7 @@ const refs = {
   galleryContainer: document.querySelector('.gallery'),
   loadMoreBtn: document.querySelector('.load-more'),
 };
+
 let isShown = 0;
 const newsApiService = new NewsApiService();
 
@@ -34,16 +35,9 @@ function onSearch(e) {
   }
 
   isShown = 0;
-  fetchGallery();
-  onRenderGallery(hits);
-}
+  fetchGallery();}
 
-function onLoadMore() {
-  newsApiService.incrementPage();
-  fetchGallery();
-}
-
-async function fetchGallery() {
+function fetchGallery() {
   refs.loadMoreBtn.classList.add('is-hidden');
 
   const r = await newsApiService.fetchGallery();
@@ -64,6 +58,7 @@ async function fetchGallery() {
   if (isShown < total) {
     Notify.success(`Hooray! We found ${total} images !!!`);
     refs.loadMoreBtn.classList.remove('is-hidden');
+    observer.observe(refs.loadMoreBtn);
   }
 
   if (isShown >= total) {
@@ -112,3 +107,10 @@ function onRenderGallery(elements) {
   refs.galleryContainer.insertAdjacentHTML('beforeend', markup);
   lightbox.refresh();
 }
+
+function onLoadMore() {
+  newsApiService.incrementPage();
+  fetchGallery();
+}
+
+refs.searchForm.addEventListener('submit', onSearch);
