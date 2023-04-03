@@ -35,9 +35,10 @@ function onSearch(e) {
   }
 
   isShown = 0;
-  fetchGallery();}
+  fetchGallery();
+}
 
-function fetchGallery() {
+async function fetchGallery() {
   refs.loadMoreBtn.classList.add('is-hidden');
 
   const r = await newsApiService.fetchGallery();
@@ -53,12 +54,10 @@ function fetchGallery() {
   }
 
   onRenderGallery(hits);
-  isShown += hits.length;
 
   if (isShown < total) {
     Notify.success(`Hooray! We found ${total} images !!!`);
     refs.loadMoreBtn.classList.remove('is-hidden');
-    observer.observe(refs.loadMoreBtn);
   }
 
   if (isShown >= total) {
@@ -113,4 +112,10 @@ function onLoadMore() {
   fetchGallery();
 }
 
-refs.searchForm.addEventListener('submit', onSearch);
+refs.searchForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  refs.galleryContainer.innerHTML = '';
+  newsApiService.query = e.currentTarget.elements.searchQuery.value.trim();
+  newsApiService.resetPage();
+  fetchGallery();
+});
